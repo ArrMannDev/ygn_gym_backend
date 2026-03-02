@@ -6,11 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Role } from '@prisma/client';
 
 @ApiTags('users')
 @Controller('users')
@@ -27,9 +29,10 @@ export class UsersController {
 
   @Get()
   @ApiOperation({ summary: 'Get all users' })
+  @ApiQuery({ name: 'role', enum: Role, required: false })
   @ApiResponse({ status: 200, description: 'Returns all users' })
-  findAll() {
-    return this.usersService.findAll();
+  findAll(@Query('role') role?: Role) {
+    return this.usersService.findAll(role);
   }
 
   @Get(':id')

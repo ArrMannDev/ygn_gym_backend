@@ -26,4 +26,8 @@ export class CreateClassDto {
   @IsInt()
   @IsNotEmpty()
   capacity: number;
+
+  @IsString()
+  @IsOptional()
+  image?: string;
 }

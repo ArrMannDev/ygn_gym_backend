@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Role } from '@prisma/client';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../prisma/prisma.service';
@@ -18,13 +19,37 @@ export class UsersService {
     });
   }
 
-  findAll() {
+  findAll(role?: Role) {
+    if (role) {
+      return this.prisma.user.findMany({
+        where: { role },
+      });
+    }
     return this.prisma.user.findMany();
   }
 
   findOne(id: number) {
     return this.prisma.user.findUnique({
       where: { id },
+      include: {
+        bookings: {
+          include: {
+            class: {
+              include: { trainer: true },
+            },
+          },
+        },
+        classes: {
+          include: {
+            bookings: {
+              include: {
+                user: true,
+              },
+            },
+          },
+        },
+        memberships: true,
+      },
     });
   }
 

@@ -24,4 +24,18 @@ export class CreateUserDto {
   @IsEnum(Role)
   @IsOptional()
   role?: Role = Role.USER;
+
+  @IsString()
+  @IsOptional()
+  bio?: string;
+
+  @IsOptional()
+  specialties?: string[];
+
+  @IsOptional()
+  socialLinks?: Record<string, string>;
+
+  @IsString()
+  @IsOptional()
+  image?: string;
 }
